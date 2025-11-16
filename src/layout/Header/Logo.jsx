@@ -1,11 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logoImage from '../../assets/logo.png';
 
 export const Logo = () => (
   <Link
     to="/"
-    className="text-3xl font-bold text-yellow-400 tracking-wider"
+    className="tracking-wider"
   >
-    MovieRadar
+    <img 
+      src={logoImage} 
+      alt="MovieRadar Logo" 
+      className="h-10 w-auto"
+    />
   </Link>
 );
