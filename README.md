@@ -1,6 +1,6 @@
 # 🎬 MovieRadar
 
-¡Bienvenido a MovieRadar! Una aplicación web moderna construida con React, Vite y Tailwind CSS para explorar, buscar y descubrir tus películas y series favoritas usando la OMDb API.
+**MovieRadar** es una aplicación web moderna y robusta para la exploración de cine y televisión. Construida con el ecosistema de **React** y estilizada con **Tailwind CSS**, utiliza la potente API de **The Movie Database (TMDb)** para ofrecer información actualizada, trailers, reseñas y recomendaciones inteligentes.
 
 **[Ver el proyecto en vivo 🚀](https://proyecto-final-js-movie-radar.vercel.app/)**
 
@@ -8,50 +8,46 @@
 
 ## ✨ Características Principales
 
-* **Búsqueda Rápida en el Header:** Un buscador "en vivo" con *debounce* que muestra resultados instantáneos mientras escribes.
-* **Páginas Dedicadas:** Secciones separadas y optimizadas para Películas, Series y una Home page dinámica.
-* **Carruseles Dinámicos:** La página de inicio utiliza búsquedas múltiples y aleatorias para mostrar contenido fresco en cada visita.
-* **Diseño 100% Responsivo:** Interfaz moderna creada con Tailwind CSS que se adapta perfectamente a móviles, tablets y escritorio.
-* **Navegación Fluida:** Creado como una SPA (Single Page Application) usando React Router, con scroll automático al inicio en cada cambio de ruta.
-* **Manejo de Errores:** Incluye páginas 404 personalizadas y manejo de errores de API y de imágenes rotas.
+### 🔍 Búsqueda y Descubrimiento Avanzado
+* **Búsqueda Híbrida:** Sistema inteligente que alterna entre búsqueda por texto y modo "Descubrimiento" por categorías.
+* **Filtros Facetados:** Filtra contenido por **Categoría** (Cine/TV), **Género** (Acción, Comedia, etc.) y **Año**.
+* **Paginación Inteligente:** Navegación completa con botones de anterior/siguiente y un input de "Salto Rápido" para navegar entre miles de resultados.
+
+### 📱 Experiencia de Usuario (UX/UI)
+* **Diseño Responsive:** Interfaz adaptativa que funciona perfecto en móviles y escritorio.
+* **UI Personalizada:** Barras de desplazamiento estéticas (Custom Scrollbars), transiciones suaves y efectos hover.
+* **Navegación Rápida:** Scroll automático al cambiar de página y feedback visual de carga (Spinners).
+
+### 🎞️ Detalle de Contenido (Rich Media)
+* **Fichas Completas:** Información detallada de Películas y Series separadas por rutas semánticas (`/movie/:id` y `/tv/:id`).
+* **Trailers Integrados:** Reproductor de YouTube incrustado para ver avances sin salir de la app.
+* **Elenco Visual:** Carrusel con fotos y nombres de los actores principales.
+* **Reseñas de Usuarios:** Sección de críticas y opiniones reales de la comunidad.
+* **Recomendaciones:** Sugerencias automáticas basadas en el título que estás viendo.
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+## 🛠️ Stack Tecnológico
 
-* **Frontend:** React 18+ (con Hooks)
-* **Build Tool:** Vite
-* **Estilos:** Tailwind CSS
-* **Routing:** React Router DOM v6
-* **API:** OMDb API
+* **Core:** React 18+ (Hooks personalizados & Context)
+* **Build Tool:** Vite (Rendimiento extremo)
+* **Estilos:** Tailwind CSS v4 (Diseño atómico y responsive)
+* **Routing:** React Router DOM v6+ (Rutas dinámicas y anidadas)
+* **Datos:** TMDb API (The Movie Database)
 * **Despliegue:** Vercel
 
 ---
 
-## 🚀 Cómo Empezar (Localmente)
+## 📂 Estructura del Proyecto
 
-Si quieres correr este proyecto en tu máquina local, sigue estos pasos:
+El proyecto sigue una arquitectura modular y limpia:
 
-1.  **Clona el repositorio:**
-    ```bash
-    git clone [https://github.com/EdhuMS/Proyecto-Final-JS-MovieRadar.git](https://github.com/EdhuMS/Proyecto-Final-JS-MovieRadar.git)
-    cd Proyecto-Final-JS-MovieRadar
-    ```
-
-2.  **Instala las dependencias:**
-    ```bash
-    npm install
-    ```
-
-3.  **Crea tu archivo de entorno:**
-    En la raíz del proyecto, crea un archivo llamado `.env` y añade tu API Key de OMDb:
-    ```
-    VITE_OMDB_API_KEY=tu_api_key_aqui
-    ```
-
-4.  **Corre el proyecto:**
-    ```bash
-    npm run dev
-    ```
-
-¡Y listo! La aplicación estará corriendo en `http://localhost:5173`.
+```text
+src/
+├── components/   # Piezas de UI reutilizables (Cards, Pagination, Filters...)
+├── hooks/        # Lógica de negocio (useMovies, useMovieDetail...)
+├── layout/       # Estructura base (Header, Footer, MainLayout)
+├── pages/        # Vistas principales (Home, Search, Details...)
+├── router/       # Configuración de rutas
+├── services/     # Adaptador de API (tmdb.js)
+└── styles/       # CSS global y configuraciones
