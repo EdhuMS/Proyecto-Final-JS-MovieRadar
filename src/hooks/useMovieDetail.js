@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { getMovieById } from '../services/omdb';
+import { getMovieById } from '../services/tmdb';
 
-export const useMovieDetail = ({ id }) => {
+export const useMovieDetail = ({ id, type }) => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,7 +13,7 @@ export const useMovieDetail = ({ id }) => {
       try {
         setLoading(true);
         setError(null);
-        const movieData = await getMovieById({ id });
+        const movieData = await getMovieById({ id, type });
         setMovie(movieData);
       } catch (e) {
         setError(e.message);
@@ -21,7 +21,7 @@ export const useMovieDetail = ({ id }) => {
         setLoading(false);
       }
     })();
-  }, [id]); // Se ejecuta cada vez que el 'id' de la URL cambie
+  }, [id, type]);
 
   return { movie, loading, error };
 };

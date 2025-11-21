@@ -1,38 +1,48 @@
-import React from 'react';
-import { DynamicMovieCarousel } from '../components/DynamicMovieCarousel';
-
+import React from "react";
+import { MovieCarousel } from "../components/MovieCarousel";
 
 const HomePage = () => {
-
   return (
-    <section className="flex flex-col items-center w-full">
-      <h2 className="text-3xl lg:text-4xl font-semibold text-center mb-12">
-        Lo más popular en MovieRadar
-      </h2>
-      
-      <div className="w-full mt-4 space-y-12">
+    <section className="flex flex-col w-full animate-fade-in">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4">
+          Bienvenido a <span className="text-yellow-400">MovieRadar</span>
+        </h1>
+        <p className="text-gray-400 text-lg">
+          Descubre tendencias, explora géneros y encuentra tu próxima obsesión.
+        </p>
+      </div>
 
-        <DynamicMovieCarousel 
-          title="Series del Momento" 
-          searchTerms={["Stranger Things", "The Boys", "The Last of Us", "Arcane"]}
-          type="series" 
-        />
-        
-        <DynamicMovieCarousel 
-          title="Películas Populares" 
-          searchTerms={["Bad Boys", "Oppenheimer", "Avengers", "Avatar", "Now You See Me"]}
+      <div className="w-full space-y-8">
+
+        <MovieCarousel
+          title="Películas en Tendencia"
+          category="popular"
           type="movie"
         />
 
-        <DynamicMovieCarousel 
-          title="Clásicos de Culto" 
-          searchTerms={["Pulp Fiction"]}
+        <MovieCarousel
+          title="Series Mejor Valoradas"
+          category="top_rated"
+          type="series"
+        />
+
+        <MovieCarousel
+          title="Próximos Estrenos"
+          category="upcoming"
           type="movie"
         />
 
-        <DynamicMovieCarousel 
-          title="Joyas de la Animación" 
-          searchTerms={["Spider-Verse"]}
+        <MovieCarousel
+          title="Acción y Adrenalina"
+          category="action"
+          type="movie"
+        />
+
+        <MovieCarousel
+          title="Ciencia Ficción TV"
+          category="scifi_fantasy"
+          type="series"
         />
       </div>
     </section>

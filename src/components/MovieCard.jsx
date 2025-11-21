@@ -1,14 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const MovieCard = ({ id, title, year, poster }) => {
-  const placeholderImage =
-    "https://via.placeholder.com/300x445.png?text=No+Poster";
+export const MovieCard = ({ id, title, year, poster, mediaType }) => {
+  const placeholderImage = "https://via.placeholder.com/300x445.png?text=No+Poster";
   const imageUrl = poster === "N/A" ? placeholderImage : poster;
+
+  const basePath = mediaType === 'tv' ? '/tv' : '/movie';
 
   return (
     <Link
-      to={`/movie/${id}`}
+      to={`${basePath}/${id}`}
       className="group block bg-gray-700 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out"
     >
       <div className="relative">

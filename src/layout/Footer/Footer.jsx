@@ -6,7 +6,6 @@ const Footer = () => {
     <footer className="mt-auto bg-gray-950 text-gray-400">
       <div className="container mx-auto px-4 pt-6 pb-3">
         
-        {/* Contenedor principal del grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
           
           {/* Col 1: Logo y descripción */}
@@ -24,6 +23,7 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-white mb-4">Navegación</h4>
             <ul className="space-y-2">
               <li><Link to="/" className="hover:text-yellow-400 transition-colors">Home</Link></li>
+              <li><Link to="/search" className="hover:text-yellow-400 transition-colors">Categorías</Link></li>
               <li><Link to="/series" className="hover:text-yellow-400 transition-colors">Series</Link></li>
               <li><Link to="/peliculas" className="hover:text-yellow-400 transition-colors">Peliculas</Link></li>
             </ul>

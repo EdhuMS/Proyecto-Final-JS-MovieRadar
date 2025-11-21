@@ -3,30 +3,35 @@ import { MovieCarousel } from '../components/MovieCarousel';
 
 const SeriesPage = () => {
   return (
-    <section className="w-full">
-      <h2 className="text-3xl lg:text-4xl font-semibold text-white mb-8">
-        Explora las Mejores Series
+    <section className="w-full animate-fade-in">
+      <h2 className="text-3xl lg:text-4xl font-bold text-white mb-8 border-b border-gray-700 pb-4">
+        Explora Series de TV
       </h2>
 
-      <div className="w-full mt-4">
+      <div className="w-full mt-4 space-y-10">
         <MovieCarousel 
-          title="Series de Crimen Populares" 
-          searchTerm="Breaking Bad"
+          title="Series en Emisión" 
+          category="on_the_air" 
           type="series" 
         />
         <MovieCarousel 
-          title="Fantasía Épica" 
-          searchTerm="Game of Thrones"
+          title="Top Rated TV" 
+          category="top_rated" 
           type="series" 
         />
         <MovieCarousel 
-          title="Comedias Clásicas" 
-          searchTerm="Friends"
+          title="Crimen y Misterio" 
+          category="crime" 
           type="series" 
         />
         <MovieCarousel 
-          title="Misterio y Sci-Fi" 
-          searchTerm="Stranger Things"
+          title="Comedias Sitcom" 
+          category="comedy" 
+          type="series" 
+        />
+        <MovieCarousel 
+          title="Acción y Aventura" 
+          category="action_adventure" 
           type="series" 
         />
       </div>

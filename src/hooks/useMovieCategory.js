@@ -1,32 +1,38 @@
 import { useState, useEffect } from 'react';
-import { searchMovies } from '../services/omdb';
+import { getMoviesByCategory } from '../services/tmdb';
 
-export const useMovieCategory = ({ search, type }) => {
+export const useMovieCategory = ({ category, type = 'movie' }) => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!category) return;
+
+    let isMounted = true;
+
     (async () => {
       try {
         setLoading(true);
         setError(null);
         
-        const newMovies = await searchMovies({ search, type });
-        // La API a veces devuelve solo 10, tomamos los primeros 8 para un carrusel limpio.
-        if (newMovies) {
-          setMovies(newMovies.slice(0, 8));
-        } else {
-          setMovies([]);
+        const newMovies = await getMoviesByCategory({ category, type });
+        
+        if (isMounted) {
+          setMovies(newMovies ? newMovies.slice(0, 10) : []);
         }
         
       } catch (e) {
-        setError(e.message);
+        if (isMounted) setError(e.message);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     })();
-  }, [search, type]); // Se ejecuta cada vez que 'search' o 'type' cambien
+
+    return () => {
+      isMounted = false;
+    };
+  }, [category, type]);
 
   return { movies, loading, error };
 };

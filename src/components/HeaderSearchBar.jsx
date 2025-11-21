@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDebounce } from "../hooks/useDebounce";
-import { searchMovies } from "../services/omdb";
+import { searchMovies } from "../services/tmdb";
 
 const SearchIcon = () => (
   <svg
-    xmlns="http://www.w.w3.org/2000/svg"
+    xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
     strokeWidth={2}
@@ -23,27 +23,29 @@ const SearchIcon = () => (
 export const HeaderSearchBar = ({ onSearchComplete }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const [totalResults, setTotalResults] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const navigate = useNavigate();
   const debouncedQuery = useDebounce(query, 500);
 
-  // Efecto para buscar en la API
   useEffect(() => {
     if (debouncedQuery.length > 2) {
       setIsLoading(true);
       searchMovies({ search: debouncedQuery })
-        .then((newMovies) => {
-          setResults(newMovies || []);
+        .then((response) => {
+          const moviesArray = response?.results || [];
+          setResults(moviesArray);
+          setTotalResults(response?.totalResults || 0);
           setIsLoading(false);
           setIsDropdownOpen(true);
         })
         .catch((error) => {
-          console.error("Error en la búsqueda:", error.message);
+          console.error("Error:", error);
           setIsLoading(false);
           setResults([]);
-          setIsDropdownOpen(true);
+          setTotalResults(0);
         });
     } else {
       setResults([]);
@@ -55,13 +57,9 @@ export const HeaderSearchBar = ({ onSearchComplete }) => {
     e.preventDefault();
     if (query.length > 0) {
       navigate(`/search?q=${query}`);
-      setQuery("");
-      setResults([]);
+      setResults([]); 
       setIsDropdownOpen(false);
-
-      if (onSearchComplete) {
-        onSearchComplete();
-      }
+      if (onSearchComplete) onSearchComplete();
     }
   };
 
@@ -69,90 +67,76 @@ export const HeaderSearchBar = ({ onSearchComplete }) => {
     setQuery("");
     setResults([]);
     setIsDropdownOpen(false);
-
-    if (onSearchComplete) {
-      onSearchComplete();
-    }
+    if (onSearchComplete) onSearchComplete();
   };
 
-
   const handleBlur = () => {
-    setTimeout(() => {
-      setIsDropdownOpen(false);
-    }, 200);
+    setTimeout(() => setIsDropdownOpen(false), 200);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative w-full lg:w-64">
+    <form onSubmit={handleSubmit} className="relative w-full lg:w-64 animate-fade-in">
       <div className="relative">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setIsDropdownOpen(true)}
+          onFocus={() => { if (results.length > 0) setIsDropdownOpen(true); }}
           onBlur={handleBlur}
           placeholder="Buscar..."
-          className="w-full pl-10 pr-4 py-2 bg-gray-700 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          className="w-full pl-10 pr-4 py-2 bg-gray-700 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
         />
         <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
           <SearchIcon />
         </div>
       </div>
 
-      {/* EL DROPDOWN DE RESULTADOS */}
       {isDropdownOpen && query.length > 2 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-gray-700 border border-gray-600 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-          {isLoading && <p className="p-4 text-gray-300">Buscando...</p>}
+        <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl z-50 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-yellow-400">
+          {isLoading && <p className="p-4 text-gray-300 text-center animate-pulse">Buscando...</p>}
 
           {!isLoading && results.length > 0 && (
             <ul>
-              {results.slice(0, 5).map((movie) => (
-                <li
-                  key={movie.id}
-                  className="border-b border-gray-600 last:border-b-0"
-                >
-                  <Link
-                    to={`/movie/${movie.id}`}
-                    onClick={handleResultClick}
-                    className="flex items-center p-3 hover:bg-gray-600 transition-colors"
-                  >
-                    <img
-                      src={
-                        movie.poster === "N/A"
-                          ? "https://via.placeholder.com/50x75"
-                          : movie.poster
-                      }
-                      alt={movie.title}
-                      className="w-12 h-16 object-cover rounded mr-3"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src =
-                          "https://placehold.co/50x75.png?text=No+Poster";
-                      }}
-                    />
-                    <div>
-                      <p className="text-white font-semibold">{movie.title}</p>
-                      <p className="text-gray-400 text-sm">{movie.year}</p>
-                    </div>
-                  </Link>
-                </li>
-              ))}
+              {results.slice(0, 5).map((movie) => {
+                 const path = movie.mediaType === 'tv' ? `/tv/${movie.id}` : `/movie/${movie.id}`;
+                 return (
+                  <li key={movie.id} className="border-b border-gray-700 last:border-b-0 hover:bg-gray-700 transition-colors">
+                    <Link to={path} onClick={handleResultClick} className="flex items-center p-3">
+                      <img
+                        src={movie.poster}
+                        alt={movie.title}
+                        className="w-10 h-14 object-cover rounded shadow-sm mr-3"
+                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://placehold.co/50x75?text=No+Img"; }}
+                      />
+                      <div className="overflow-hidden">
+                        <p className="text-white font-semibold text-sm truncate">{movie.title}</p>
+                        <div className="flex items-center gap-2 text-xs text-gray-400">
+                            <span>{movie.year}</span>
+                            <span className="px-1.5 py-0.5 bg-gray-600 rounded uppercase text-[10px]">
+                                {movie.mediaType === 'tv' ? 'TV' : 'Cine'}
+                            </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                 );
+              })}
             </ul>
           )}
 
           {/* Botón "Ver más resultados" */}
-          {!isLoading && results.length > 5 && (
+          {!isLoading && totalResults > 5 && (
             <Link
               to={`/search?q=${query}`}
               onClick={handleResultClick}
-              className="block p-4 text-center font-bold text-yellow-400 hover:bg-gray-600 rounded-b-lg"
+              className="block p-3 text-center text-sm font-bold text-yellow-400 hover:bg-gray-700 hover:text-yellow-300 transition-colors rounded-b-lg border-t border-gray-700"
             >
-              Ver más resultados ({results.length})
+              Ver los {totalResults.toLocaleString()} resultados
             </Link>
           )}
 
-          {!isLoading && results.length === 0 && debouncedQuery.length > 2 && (
-            <p className="p-4 text-gray-300">No se encontraron resultados.</p>
+          {!isLoading && results.length === 0 && (
+            <p className="p-4 text-gray-400 text-center text-sm">Sin resultados para "{query}"</p>
           )}
         </div>
       )}

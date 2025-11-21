@@ -2,7 +2,7 @@ import React from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useMovieDetail } from "../hooks/useMovieDetail";
 import { Spinner } from "../components/Spinner";
-import { MovieCarousel } from "../components/MovieCarousel";
+import { MovieCard } from "../components/MovieCard";
 
 const BackArrowIcon = () => (
   <svg
@@ -21,24 +21,18 @@ const BackArrowIcon = () => (
   </svg>
 );
 
-const MovieDetailPage = () => {
+const MovieDetailPage = ({ type = "movie" }) => {
   const { id } = useParams();
-  const { movie, loading, error } = useMovieDetail({ id });
+  const { movie, loading, error } = useMovieDetail({ id, type });
   const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1);
-  };
-
-  if (loading) {
+  if (loading)
     return (
       <div className="flex justify-center items-center h-[60vh]">
         <Spinner />
       </div>
     );
-  }
-
-  if (error) {
+  if (error)
     return (
       <div className="text-center text-red-500 text-2xl h-[60vh]">
         <p>{error}</p>
@@ -47,114 +41,201 @@ const MovieDetailPage = () => {
         </Link>
       </div>
     );
-  }
-
-  if (!movie) {
-    return null;
-  }
+  if (!movie) return null;
 
   const placeholderImage =
     "https://via.placeholder.com/400x600.png?text=No+Poster";
   const imageUrl = movie.poster === "N/A" ? placeholderImage : movie.poster;
 
-  const mainGenre = movie.genre?.split(", ")[0];
+  const renderCast = () => {
+    if (!movie.actors || movie.actors.length === 0) return null;
+    if (typeof movie.actors === "string")
+      return <p className="text-gray-300">{movie.actors}</p>;
+    return (
+      <div className="flex gap-4 overflow-x-auto py-4 scrollbar-thin scrollbar-thumb-gray-600">
+        {movie.actors.map((actor, index) => (
+          <div key={index} className="flex flex-col items-center min-w-[100px]">
+            <img
+              src={actor.photo || "https://placehold.co/100x100?text=?"}
+              alt={actor.name}
+              className="w-20 h-20 rounded-full object-cover border-2 border-gray-600 mb-2"
+            />
+            <p className="text-xs text-center text-white font-bold leading-tight">
+              {actor.name}
+            </p>
+            <p className="text-xs text-center text-gray-400 leading-tight">
+              {actor.character}
+            </p>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
-    <>
-      {/* BOTÓN VOLVER */}
+    <div className="animate-fade-in pb-10">
       <button
-        onClick={handleBack}
-        className="flex items-center gap-2 text-gray-300 hover:text-yellow-400 font-semibold mb-6 transition-colors duration-200"
+        onClick={() => navigate(-1)}
+        className="flex items-center gap-2 text-gray-300 hover:text-yellow-400 font-semibold mb-6 transition-colors"
       >
-        <BackArrowIcon />
-        Volver
+        <BackArrowIcon /> Volver
       </button>
 
-      <article className="bg-gray-700 shadow-xl rounded-lg overflow-hidden md:max-w-6xl mx-auto">
+      {/* INFO PRINCIPAL */}
+      <article className="bg-gray-800 shadow-2xl rounded-xl overflow-hidden mb-12">
         <div className="md:flex">
-          {/* Columna Izquierda: Poster */}
-          <div className="md:w-1/3">
+          <div className="md:w-1/3 relative">
             <img
               src={imageUrl}
               alt={`Poster de ${movie.title}`}
-              className="w-full h-auto object-cover"
+              className="w-full h-full object-cover"
+              style={{ minHeight: "450px" }}
             />
           </div>
-
-          {/* Columna Derecha: Información */}
-          <div className="md:w-2/3 p-6 md:p-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              {movie.title}
-            </h1>
-            <p className="text-2xl text-gray-400 mb-4">{movie.year}</p>
-
-            {/* Píldoras de Info (Género, Duración) */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              <span className="bg-gray-600 text-yellow-400 px-3 py-1 rounded-full text-sm font-semibold">
+          <div className="md:w-2/3 p-6 md:p-10 bg-gray-800">
+            <div className="flex flex-wrap items-baseline gap-4 mb-2">
+              <h1 className="text-3xl md:text-5xl font-bold text-white">
+                {movie.title}
+              </h1>
+              <span className="text-2xl text-yellow-400 font-light">
+                ({movie.year})
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-3 mb-6 text-sm">
+              <span className="px-3 py-1 bg-gray-700 rounded text-gray-200 border border-gray-600">
                 {movie.runtime}
               </span>
-              {movie.genre?.split(", ").map((g) => (
+              {movie.genres?.split(", ").map((g) => (
                 <span
                   key={g}
-                  className="bg-gray-600 text-gray-200 px-3 py-1 rounded-full text-sm font-semibold"
+                  className="px-3 py-1 bg-blue-900/50 text-blue-200 rounded border border-blue-800/50"
                 >
                   {g}
                 </span>
               ))}
             </div>
-
-            {/* Trama (Plot) */}
-            <h3 className="text-xl font-semibold text-white mb-2">Trama</h3>
-            <p className="text-gray-300 mb-6 leading-relaxed">{movie.plot}</p>
-
-            {/* Más Detalles (Director, Actores) */}
-            <div className="border-t border-gray-600 pt-4">
-              <p className="text-gray-300 mb-2">
-                <strong className="text-white">Director:</strong>{" "}
-                {movie.director}
-              </p>
-              <p className="text-gray-300">
-                <strong className="text-white">Actores:</strong> {movie.actors}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-white mb-2">
+                Sinopsis
+              </h3>
+              <p className="text-gray-300 text-lg leading-relaxed opacity-90">
+                {movie.plot || "No hay descripción disponible."}
               </p>
             </div>
-
-            {/* Ratings */}
-            <div className="flex gap-4 mt-6 pt-4 border-t border-gray-600">
+            <div className="border-t border-gray-700 pt-6 mb-6">
+              <p className="text-gray-300 mb-4">
+                <strong className="text-white uppercase text-sm tracking-wide mr-2">
+                  Director:
+                </strong>{" "}
+                {movie.director}
+              </p>
+              <div className="mb-2">
+                <strong className="text-white uppercase text-sm tracking-wide block mb-3">
+                  Elenco Principal:
+                </strong>
+                {renderCast()}
+              </div>
+            </div>
+            <div className="flex items-center gap-6 mt-4">
               {movie.rating && movie.rating !== "N/A" && (
-                <div className="text-center">
-                  <span className="text-3xl font-bold text-yellow-400">
-                    {movie.rating}
-                  </span>
-                  <span className="text-gray-400 block text-sm">/ 10</span>
-                  <span className="text-gray-300 block text-sm font-semibold">
-                    IMDb
-                  </span>
-                </div>
-              )}
-              {movie.metascore && movie.metascore !== "N/A" && (
-                <div className="text-center">
-                  <span className="bg-green-600 text-white text-3xl font-bold px-3 py-1 rounded">
-                    {movie.metascore}
-                  </span>
-                  <span className="text-gray-300 block text-sm font-semibold mt-1">
-                    Metascore
-                  </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-yellow-400 text-4xl">★</span>
+                  <div>
+                    <span className="text-2xl font-bold text-white">
+                      {movie.rating}
+                    </span>
+                    <span className="text-xs text-gray-400 block">
+                      TMDb Rating
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
       </article>
-      {/* CARRUSEL DE GÉNERO SIMILAR */}
-      {mainGenre && (
-        <div className="w-full mt-16">
-          <MovieCarousel
-            title={`Más del género: ${mainGenre}`}
-            searchTerm={mainGenre}
-          />
+
+      {/* SECCIÓN 2: TRAILER Y RESEÑAS */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        {/* Trailer */}
+        {movie.trailer ? (
+          <div className="lg:col-span-2">
+            <h3 className="text-2xl font-semibold text-white mb-6 border-l-4 border-yellow-400 pl-3">
+              Trailer Oficial
+            </h3>
+            <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-lg">
+              <iframe
+                src={movie.trailer}
+                title="Trailer"
+                className="absolute top-0 left-0 w-full h-full"
+                allowFullScreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+        ) : null}
+
+        {/* Reseñas */}
+        <div className={movie.trailer ? "lg:col-span-1" : "lg:col-span-3"}>
+          <h3 className="text-2xl font-semibold text-white mb-6 border-l-4 border-blue-500 pl-3">
+            Reseñas de Fans ({movie.reviews.length})
+          </h3>
+
+          <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+            {movie.reviews && movie.reviews.length > 0 ? (
+              movie.reviews.map((review, idx) => (
+                <div
+                  key={idx}
+                  className="bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-sm hover:bg-gray-750 transition-colors"
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="font-bold text-yellow-400 text-sm">
+                      {review.author}
+                    </span>
+                    {review.rating && (
+                      <span className="text-xs bg-gray-700 px-2 py-1 rounded text-white">
+                        ★ {review.rating}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-300 text-xs leading-relaxed italic line-clamp-6">
+                    "{review.content}"
+                  </p>
+                </div>
+              ))
+            ) : (
+              <div className="bg-gray-800/50 border border-dashed border-gray-600 rounded-xl p-8 text-center">
+                <p className="text-gray-400 italic">
+                  No hay reseñas escritas para este título todavía.
+                </p>
+                <p className="text-gray-600 text-xs mt-2">
+                  ¡Sé el primero en escribir una en TMDb!
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* SECCIÓN 3: RECOMENDACIONES */}
+      {movie.recommendations && movie.recommendations.length > 0 && (
+        <div className="w-full mt-8 border-t border-gray-800 pt-6">
+          <h3 className="text-3xl font-semibold text-white mb-6">
+            Si te gustó esto, te recomendamos...
+          </h3>
+          <div className="flex overflow-x-auto space-x-6 py-4 pb-8 scrollbar-thin scrollbar-thumb-yellow-400 scrollbar-track-gray-800 hover:scrollbar-thumb-yellow-300">
+            {movie.recommendations.map((rec, index) => (
+              <div
+                key={`${rec.id}-${index}`}
+                className="shrink-0 w-48 md:w-56 transition-transform hover:-translate-y-2 duration-300"
+              >
+                <MovieCard {...rec} />
+              </div>
+            ))}
+          </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
