@@ -56,13 +56,18 @@ Si deseas correr este proyecto en tu máquina:
     ```
 
 3.  **Configura las Variables de Entorno:**
-    Crea un archivo `.env` en la raíz del proyecto y añade tu clave de TMDb (es gratuita):
+    Crea un archivo `.env` en la raíz del proyecto y añade tus claves:
     
     ```env
+    # API Key de The Movie Database (Gratuita en themoviedb.org)
     VITE_TMDB_API_KEY=tu_api_key_de_tmdb
+    
+    # URL Base para las imágenes
     VITE_TMDB_BS_IMG=[https://image.tmdb.org/t/p/w500](https://image.tmdb.org/t/p/w500)
+    
+    # Email para aumentar la cuota de traducción (Opcional, recomendado)
+    VITE_TRANSLATION_EMAIL=tu_email@ejemplo.com
     ```
-    *(Nota: La API de traducción no requiere Key para uso básico)*
 
 4.  **Corre el servidor de desarrollo:**
     ```bash
