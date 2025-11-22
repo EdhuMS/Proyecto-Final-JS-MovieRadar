@@ -35,6 +35,10 @@ const router = createBrowserRouter([
         element: <PeliculasPage /> 
       },
       { 
+        path: 'series', 
+        element: <SeriesPage /> 
+      },
+      { 
         path: "*",
         element: <NotFoundPage />
       },
