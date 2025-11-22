@@ -53,21 +53,23 @@ export const HeaderSearchBar = ({ onSearchComplete }) => {
     }
   }, [debouncedQuery]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (query.length > 0) {
-      navigate(`/search?q=${query}`);
-      setResults([]); 
-      setIsDropdownOpen(false);
-      if (onSearchComplete) onSearchComplete();
-    }
-  };
-
-  const handleResultClick = () => {
+  const clearAndClose = () => {
     setQuery("");
     setResults([]);
     setIsDropdownOpen(false);
     if (onSearchComplete) onSearchComplete();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (query.length > 0) {
+      navigate(`/search?q=${query}`);
+      clearAndClose();
+    }
+  };
+
+  const handleResultClick = () => {
+    clearAndClose();
   };
 
   const handleBlur = () => {
@@ -75,13 +77,18 @@ export const HeaderSearchBar = ({ onSearchComplete }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative w-full lg:w-64 animate-fade-in">
+    <form
+      onSubmit={handleSubmit}
+      className="relative w-full lg:w-64 animate-fade-in"
+    >
       <div className="relative">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => { if (results.length > 0) setIsDropdownOpen(true); }}
+          onFocus={() => {
+            if (results.length > 0) setIsDropdownOpen(true);
+          }}
           onBlur={handleBlur}
           placeholder="Buscar..."
           className="w-full pl-10 pr-4 py-2 bg-gray-700 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
@@ -92,39 +99,58 @@ export const HeaderSearchBar = ({ onSearchComplete }) => {
       </div>
 
       {isDropdownOpen && query.length > 2 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl z-50 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-yellow-400">
-          {isLoading && <p className="p-4 text-gray-300 text-center animate-pulse">Buscando...</p>}
+        <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl z-50 max-h-96 overflow-y-auto custom-scrollbar">
+          {isLoading && (
+            <p className="p-4 text-gray-300 text-center animate-pulse">
+              Buscando...
+            </p>
+          )}
 
           {!isLoading && results.length > 0 && (
             <ul>
               {results.slice(0, 5).map((movie) => {
-                 const path = movie.mediaType === 'tv' ? `/tv/${movie.id}` : `/movie/${movie.id}`;
-                 return (
-                  <li key={movie.id} className="border-b border-gray-700 last:border-b-0 hover:bg-gray-700 transition-colors">
-                    <Link to={path} onClick={handleResultClick} className="flex items-center p-3">
+                const path =
+                  movie.mediaType === "tv"
+                    ? `/tv/${movie.id}`
+                    : `/movie/${movie.id}`;
+                return (
+                  <li
+                    key={movie.id}
+                    className="border-b border-gray-700 last:border-b-0 hover:bg-gray-700 transition-colors"
+                  >
+                    <Link
+                      to={path}
+                      onClick={handleResultClick}
+                      className="flex items-center p-3"
+                    >
                       <img
                         src={movie.poster}
                         alt={movie.title}
                         className="w-10 h-14 object-cover rounded shadow-sm mr-3"
-                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://placehold.co/50x75?text=No+Img"; }}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src =
+                            "https://placehold.co/50x75?text=No+Img";
+                        }}
                       />
                       <div className="overflow-hidden">
-                        <p className="text-white font-semibold text-sm truncate">{movie.title}</p>
+                        <p className="text-white font-semibold text-sm truncate">
+                          {movie.title}
+                        </p>
                         <div className="flex items-center gap-2 text-xs text-gray-400">
-                            <span>{movie.year}</span>
-                            <span className="px-1.5 py-0.5 bg-gray-600 rounded uppercase text-[10px]">
-                                {movie.mediaType === 'tv' ? 'TV' : 'Cine'}
-                            </span>
+                          <span>{movie.year}</span>
+                          <span className="px-1.5 py-0.5 bg-gray-600 rounded uppercase text-[10px]">
+                            {movie.mediaType === "tv" ? "TV" : "Cine"}
+                          </span>
                         </div>
                       </div>
                     </Link>
                   </li>
-                 );
+                );
               })}
             </ul>
           )}
 
-          {/* Botón "Ver más resultados" */}
           {!isLoading && totalResults > 5 && (
             <Link
               to={`/search?q=${query}`}
@@ -136,7 +162,9 @@ export const HeaderSearchBar = ({ onSearchComplete }) => {
           )}
 
           {!isLoading && results.length === 0 && (
-            <p className="p-4 text-gray-400 text-center text-sm">Sin resultados para "{query}"</p>
+            <p className="p-4 text-gray-400 text-center text-sm">
+              Sin resultados para "{query}"
+            </p>
           )}
         </div>
       )}
