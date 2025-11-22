@@ -1,4 +1,4 @@
-const EMAIL = 'edhums10@gmail.com'; 
+const EMAIL = import.meta.env.VITE_TRANSLATION_EMAIL || '';
 
 export const translateText = async (text, targetLang = 'es') => {
   if (!text) return null;

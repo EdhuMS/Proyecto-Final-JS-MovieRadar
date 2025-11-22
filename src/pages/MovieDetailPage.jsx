@@ -2,8 +2,8 @@ import React from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useMovieDetail } from "../hooks/useMovieDetail";
 import { Spinner } from "../components/Spinner";
-import { MovieCard } from "../components/MovieCard";
 import { ReviewCard } from "../components/ReviewCard";
+import { MovieCard } from "../components/MovieCard";
 
 const BackArrowIcon = () => (
   <svg
@@ -52,8 +52,9 @@ const MovieDetailPage = ({ type = "movie" }) => {
     if (!movie.actors || movie.actors.length === 0) return null;
     if (typeof movie.actors === "string")
       return <p className="text-gray-300">{movie.actors}</p>;
+
     return (
-      <div className="flex gap-4 overflow-x-auto py-4 scrollbar-thin scrollbar-thumb-gray-600">
+      <div className="flex gap-4 overflow-x-auto py-4 custom-scrollbar">
         {movie.actors.map((actor, index) => (
           <div key={index} className="flex flex-col items-center min-w-[100px]">
             <img
@@ -157,8 +158,7 @@ const MovieDetailPage = ({ type = "movie" }) => {
       </article>
 
       {/* SECCIÓN 2: TRAILER Y RESEÑAS */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        {/* Trailer */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
         {movie.trailer ? (
           <div className="lg:col-span-2">
             <h3 className="text-2xl font-semibold text-white mb-6 border-l-4 border-yellow-400 pl-3">
@@ -176,7 +176,6 @@ const MovieDetailPage = ({ type = "movie" }) => {
           </div>
         ) : null}
 
-        {/* Reseñas */}
         <div className={movie.trailer ? "lg:col-span-1" : "lg:col-span-3"}>
           <h3 className="text-2xl font-semibold text-white mb-6 border-l-4 border-blue-500 pl-3">
             Reseñas de Fans ({movie.reviews.length})
@@ -203,11 +202,11 @@ const MovieDetailPage = ({ type = "movie" }) => {
 
       {/* SECCIÓN 3: RECOMENDACIONES */}
       {movie.recommendations && movie.recommendations.length > 0 && (
-        <div className="w-full mt-8 border-t border-gray-800 pt-6">
+        <div className="w-full mt-6 border-t border-gray-800 pt-4">
           <h3 className="text-3xl font-semibold text-white mb-6">
             Si te gustó esto, te recomendamos...
           </h3>
-          <div className="flex overflow-x-auto space-x-6 py-4 pb-8 scrollbar-thin scrollbar-thumb-yellow-400 scrollbar-track-gray-800 hover:scrollbar-thumb-yellow-300">
+          <div className="flex overflow-x-auto space-x-6 py-4 pb-8 custom-scrollbar">
             {movie.recommendations.map((rec, index) => (
               <div
                 key={`${rec.id}-${index}`}
