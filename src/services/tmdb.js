@@ -114,12 +114,33 @@ export const getMovieById = async ({ id, type = 'movie' }) => {
     v => v.site === 'YouTube' && (v.type === 'Trailer' || v.type === 'Teaser')
   );
 
-  // Procesamos las reseñas de la petición extra, filtramos reseñas vacías y tomamos hasta 10
   const reviews = reviewsData?.results?.filter(r => r.content).slice(0, 10).map(r => ({
       author: r.author,
       content: r.content,
       rating: r.author_details?.rating
   })) || [];
+
+  let recommendations = data.recommendations?.results?.slice(0, 5).map(transformMedia) || [];
+
+  if (recommendations.length === 0 && data.genres && data.genres.length > 0) {
+    try {
+      const mainGenreId = data.genres[0].id;
+      
+      const fallbackData = await fetchFromApi(
+        `/discover/${apiType}`, 
+        `&with_genres=${mainGenreId}&sort_by=popularity.desc`
+      );
+
+      if (fallbackData?.results) {
+        recommendations = fallbackData.results
+          .filter(item => item.id !== parseInt(id))
+          .slice(0, 5)
+          .map(transformMedia);
+      }
+    } catch (e) {
+      console.warn("Error fetching fallback recommendations", e);
+    }
+  }
 
   return {
     ...baseData,
@@ -133,7 +154,7 @@ export const getMovieById = async ({ id, type = 'movie' }) => {
     genres: data.genres?.map(g => g.name).join(', '),
     trailer: trailer ? `https://www.youtube.com/embed/${trailer.key}` : null,
     reviews,
-    recommendations: data.recommendations?.results?.slice(0, 5).map(transformMedia) || [],
+    recommendations,
     isTv
   };
 };
