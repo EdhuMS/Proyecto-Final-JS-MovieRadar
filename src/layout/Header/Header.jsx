@@ -5,7 +5,7 @@ import { MobileMenu } from "./MobileMenu";
 import { MenuIcon, CloseIcon } from "./HeaderIcons";
 
 const navLinks = [
-  { title: "Home", path: "/" },
+  { title: "Inicio", path: "/" },
   { title: "Categorías", path: "/search" },
   { title: "Series", path: "/series" },
   { title: "Peliculas", path: "/peliculas" },
