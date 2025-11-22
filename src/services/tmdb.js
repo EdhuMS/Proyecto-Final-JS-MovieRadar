@@ -28,7 +28,9 @@ const fetchFromApi = async (endpoint, params = '', lang = 'es-ES') => {
 
 const transformMedia = (item) => {
   if (!item) return null;
-  const isMovie = item.media_type === 'movie' || item.title;
+  
+  const inferredType = item.title ? 'movie' : 'tv'; 
+  const finalMediaType = item.media_type || inferredType;
 
   return {
     id: item.id,
@@ -38,7 +40,9 @@ const transformMedia = (item) => {
     backdrop: item.backdrop_path ? `${IMG_ORIGINAL}${item.backdrop_path}` : null,
     plot: item.overview,
     rating: item.vote_average ? item.vote_average.toFixed(1) : 'N/A',
-    mediaType: item.media_type || (isMovie ? 'movie' : 'tv'),
+    
+    mediaType: finalMediaType, 
+    
     genreIds: item.genre_ids || [],
   };
 };
