@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { translateText } from '../services/gemini';
+import { translateText } from '../services/translation';
 
 const TranslateIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -23,7 +23,7 @@ export const ReviewCard = ({ review }) => {
       return;
     }
 
-    // Si es la primera vez, llamamos a Gemini
+    // Si es la primera vez, llamamos a MyMemory
     setIsTranslating(true);
     const translation = await translateText(review.content);
     setIsTranslating(false);
@@ -70,7 +70,7 @@ export const ReviewCard = ({ review }) => {
       
       {!showOriginal && (
         <p className="text-[10px] text-gray-500 mt-2 text-right flex items-center justify-end gap-1">
-           Traducido por <strong>Gemini AI</strong>
+           Traducido por <strong>MyMemory</strong>
         </p>
       )}
     </div>
