@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useMovieDetail } from "../hooks/useMovieDetail";
 import { Spinner } from "../components/Spinner";
 import { MovieCard } from "../components/MovieCard";
+import { ReviewCard } from "../components/ReviewCard";
 
 const BackArrowIcon = () => (
   <svg
@@ -184,24 +185,7 @@ const MovieDetailPage = ({ type = "movie" }) => {
           <div className="flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
             {movie.reviews && movie.reviews.length > 0 ? (
               movie.reviews.map((review, idx) => (
-                <div
-                  key={idx}
-                  className="bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-sm hover:bg-gray-750 transition-colors"
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="font-bold text-yellow-400 text-sm">
-                      {review.author}
-                    </span>
-                    {review.rating && (
-                      <span className="text-xs bg-gray-700 px-2 py-1 rounded text-white">
-                        ★ {review.rating}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-gray-300 text-xs leading-relaxed italic line-clamp-6">
-                    "{review.content}"
-                  </p>
-                </div>
+                <ReviewCard key={idx} review={review} />
               ))
             ) : (
               <div className="bg-gray-800/50 border border-dashed border-gray-600 rounded-xl p-8 text-center">
