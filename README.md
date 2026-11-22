@@ -91,11 +91,15 @@ src/
 ├── router/       # Configuración de rutas
 ├── services/     # Adaptadores de API (tmdb.js, translation.js)
 └── styles/       # Estilos globales y custom scrollbars
+```
 
 ## Alcance, APIs y uso responsable
 
 Este repositorio es un proyecto de aprendizaje. Para ejecutarlo, configura tus propias credenciales de las APIs que correspondan y revisa las condiciones, cuotas y atribuciones de [TMDb](https://www.themoviedb.org/) y [MyMemory](https://mymemory.translated.net/). Los pósteres, imágenes, tráileres, títulos y marcas provenientes de servicios externos **no se consideran licenciados por este repositorio**.
 
-## Licencia
+## Licencia y contenido de terceros
 
-**Pendiente de definir.** Aunque el código sea visible en GitHub, no se ha añadido una licencia que autorice su reutilización o redistribución general. Antes de incorporar una licencia open source se debe revisar la autoría del código y separar los activos de terceros de cualquier permiso sobre el código propio.
+El **código original** de MovieRadar está disponible bajo **[MIT](LICENSE)**. Esta licencia permite utilizarlo y modificarlo, incluso comercialmente, conservando el aviso de copyright y la licencia.
+
+**Quedan fuera de esa concesión los materiales de terceros**: datos, imágenes, carteles, clips, marcas y otros contenidos entregados por TMDb, YouTube, MyMemory u otros proveedores, conforme a sus propias condiciones. La distribución de código bajo MIT no implica derechos de explotación sobre obras audiovisuales externas. Para el uso de sus APIs consulta su documentación oficial.
+
