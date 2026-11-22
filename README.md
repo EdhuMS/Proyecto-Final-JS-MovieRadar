@@ -31,9 +31,9 @@
 ## 🛠️ Stack Tecnológico
 
 * **Frontend:** React 18+ (Hooks, Context API)
-* **Build Tool:** Vite (Rendimiento extremo)
+* **Build Tool:** Vite 7
 * **Estilos:** Tailwind CSS 4
-* **Routing:** React Router DOM
+* **Routing:** React Router 7
 * **Datos:** TMDb API v3
 * **Traducción:** MyMemory Translation API (REST)
 * **Despliegue:** Vercel
