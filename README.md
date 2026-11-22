@@ -30,7 +30,7 @@
 
 ## 🛠️ Stack Tecnológico
 
-* **Frontend:** React 18+ (Hooks, Context API)
+* **Frontend:** React 19 (Hooks, Context API)
 * **Build Tool:** Vite 7
 * **Estilos:** Tailwind CSS 4
 * **Routing:** React Router 7
