@@ -31,9 +31,9 @@
 ## 🛠️ Stack Tecnológico
 
 * **Frontend:** React 18+ (Hooks, Context API)
-* **Build Tool:** Vite 6 (Rendimiento extremo)
+* **Build Tool:** Vite (Rendimiento extremo)
 * **Estilos:** Tailwind CSS 4
-* **Routing:** React Router DOM 6
+* **Routing:** React Router DOM
 * **Datos:** TMDb API v3
 * **Traducción:** MyMemory Translation API (REST)
 * **Despliegue:** Vercel
@@ -46,7 +46,7 @@ Si deseas correr este proyecto en tu máquina:
 
 1.  **Clona el repositorio:**
     ```bash
-    git clone [https://github.com/EdhuMS/Proyecto-Final-JS-MovieRadar.git](https://github.com/EdhuMS/Proyecto-Final-JS-MovieRadar.git)
+    git clone https://github.com/EdhuMS/Proyecto-Final-JS-MovieRadar.git
     cd Proyecto-Final-JS-MovieRadar
     ```
 
@@ -63,7 +63,7 @@ Si deseas correr este proyecto en tu máquina:
     VITE_TMDB_API_KEY=tu_api_key_de_tmdb
     
     # URL Base para las imágenes
-    VITE_TMDB_BS_IMG=[https://image.tmdb.org/t/p/w500](https://image.tmdb.org/t/p/w500)
+    VITE_TMDB_BS_IMG=https://image.tmdb.org/t/p/w500
     
     # Email para aumentar la cuota de traducción (Opcional, recomendado)
     VITE_TRANSLATION_EMAIL=tu_email@ejemplo.com
@@ -91,3 +91,11 @@ src/
 ├── router/       # Configuración de rutas
 ├── services/     # Adaptadores de API (tmdb.js, translation.js)
 └── styles/       # Estilos globales y custom scrollbars
+
+## Alcance, APIs y uso responsable
+
+Este repositorio es un proyecto de aprendizaje. Para ejecutarlo, configura tus propias credenciales de las APIs que correspondan y revisa las condiciones, cuotas y atribuciones de [TMDb](https://www.themoviedb.org/) y [MyMemory](https://mymemory.translated.net/). Los pósteres, imágenes, tráileres, títulos y marcas provenientes de servicios externos **no se consideran licenciados por este repositorio**.
+
+## Licencia
+
+**Pendiente de definir.** Aunque el código sea visible en GitHub, no se ha añadido una licencia que autorice su reutilización o redistribución general. Antes de incorporar una licencia open source se debe revisar la autoría del código y separar los activos de terceros de cualquier permiso sobre el código propio.
